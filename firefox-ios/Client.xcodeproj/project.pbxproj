@@ -10612,6 +10612,7 @@
 		F639D90D2D8A326C007EDC60 /* TabAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabAnimation.swift; sourceTree = "<group>"; };
 		F63D438AB501007BE110524A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		F68F7DF42E0A1DD40084A9DA /* LegacyBookmarksCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyBookmarksCell.swift; sourceTree = "<group>"; };
+		F6A788822E3C297D00AEBA36 /* BackgroundProcess */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BackgroundProcess; path = ../BackgroundProcess/BackgroundProcess; sourceTree = SOURCE_ROOT; };
 		F6AA4920A08DE9E2F0BC44C2 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		F6EA434FA5D8305063BC630B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F72E4FF0B09846C8F8CE7450 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Today.strings; sourceTree = "<group>"; };
@@ -11866,8 +11867,6 @@
 				5FDE66022D94528A003961DC /* A11ySettingsTests.swift */,
 				E143BF642CE36FF800A1D2D9 /* A11yTabTrayTests.swift */,
 				8A94DB8E2E0F0E780005FE69 /* HomepageSearchBarTests.swift */,
-				211FD2742DF38106003F60EF /* CookiePersistenceUITests.swift */,
-				211FD2742DF38106003F60EF /* CookiePersistenceTests.swift */,
 				3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */,
 				0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */,
 				0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */,
@@ -15462,6 +15461,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				F6A788822E3C297D00AEBA36 /* BackgroundProcess */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				F84B21C01A090F8100AAB793 /* Client */,
