@@ -188,12 +188,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         bottomInsets: CGFloat = 0
     ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(itemHeight))
+                                              heightDimension: .absolute(itemHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(itemHeight))
+                                               heightDimension: .absolute(itemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
@@ -212,13 +212,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createPocketSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.PocketConstants.cellHeight)
+            heightDimension: .absolute(UX.PocketConstants.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: UX.PocketConstants.getWidthDimension(),
-            heightDimension: .estimated(UX.PocketConstants.cellHeight)
+            heightDimension: .absolute(UX.PocketConstants.cellHeight)
         )
 
         let subItems = Array(repeating: item, count: UX.PocketConstants.numberOfItemsInColumn)
@@ -233,7 +233,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let section = NSCollectionLayoutSection(group: group)
 
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                      heightDimension: .estimated(UX.sectionHeaderHeight))
+                                                      heightDimension: .absolute(UX.sectionHeaderHeight))
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
@@ -250,11 +250,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private func createStoriesSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
-        let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
-            collectionViewWidth: environment.container.contentSize.width
-        )
-        let tallestCellHeight = getTallestStoryCellHeight(cellWidth: cellWidth)
-        let cellHeight = max(tallestCellHeight, UX.PocketConstants.redesignedMinimumCellHeight)
+//        let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
+//            collectionViewWidth: environment.container.contentSize.width
+//        )
+//        let tallestCellHeight = getTallestStoryCellHeight(cellWidth: cellWidth)
+//        let cellHeight = max(tallestCellHeight, UX.PocketConstants.redesignedMinimumCellHeight)
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -263,8 +263,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(cellWidth),
-            heightDimension: .absolute(cellHeight)
+            widthDimension: .absolute(UX.PocketConstants.redesignedFractionalWidthiPhonePortrait),
+            heightDimension: .absolute(UX.PocketConstants.redesignedFractionalWidthiPhonePortrait)
         )
 
         let subItems = Array(repeating: item, count: UX.PocketConstants.redesignNumberOfItemsInColumn)
@@ -278,7 +278,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let section = NSCollectionLayoutSection(group: group)
 
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                      heightDimension: .estimated(UX.sectionHeaderHeight))
+                                                      heightDimension: .absolute(UX.sectionHeaderHeight))
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
@@ -303,7 +303,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.sectionHeaderHeight)
+            heightDimension: .absolute(UX.sectionHeaderHeight)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -325,14 +325,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let syncedTabItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemCompactHeight)
+            heightDimension: .absolute(UX.JumpBackInConstants.syncedItemCompactHeight)
         )
 
         let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
 
         let jumpBackInItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.JumpBackInConstants.itemHeight)
+            heightDimension: .absolute(UX.JumpBackInConstants.itemHeight)
         )
 
         let jumpBackInItem = NSCollectionLayoutItem(layoutSize: jumpBackInItemSize)
@@ -343,7 +343,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: widthDimension,
-            heightDimension: .estimated(groupHeight)
+            heightDimension: .absolute(groupHeight)
         )
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
@@ -361,13 +361,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let syncedTabItemSize = NSCollectionLayoutSize(
             widthDimension: widthDimension,
-            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemHeight)
+            heightDimension: .absolute(UX.JumpBackInConstants.syncedItemHeight)
         )
         let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.JumpBackInConstants.itemHeight)
+            heightDimension: .absolute(UX.JumpBackInConstants.itemHeight)
         )
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -375,7 +375,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Nested Group (Jump Back In)
         let nestedGroupSize = NSCollectionLayoutSize(
             widthDimension: widthDimension,
-            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemHeight)
+            heightDimension: .absolute(UX.JumpBackInConstants.syncedItemHeight)
         )
         let nestedGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: nestedGroupSize,
@@ -386,7 +386,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Main Group
         let mainGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemHeight)
+            heightDimension: .absolute(UX.JumpBackInConstants.syncedItemHeight)
         )
 
         let numberOfGroups = ceil(Double(numberOfItems) / Double(UX.JumpBackInConstants.maxItemsPerGroup))
@@ -423,7 +423,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.sectionHeaderHeight)
+            heightDimension: .absolute(UX.sectionHeaderHeight)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -445,13 +445,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createBookmarksSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UX.BookmarksConstants.cellWidth),
-            heightDimension: .estimated(UX.BookmarksConstants.cellHeight)
+            heightDimension: .absolute(UX.BookmarksConstants.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UX.BookmarksConstants.cellWidth),
-            heightDimension: .estimated(UX.BookmarksConstants.cellHeight)
+            heightDimension: .absolute(UX.BookmarksConstants.cellHeight)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
@@ -459,7 +459,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.sectionHeaderHeight)
+            heightDimension: .absolute(UX.sectionHeaderHeight)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -488,20 +488,20 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // result in it having a different height (eg changes to top/bottom insets).
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
-        let collectionViewHeight = environment.container.contentSize.height
-
-        // If something went wrong with our availableContentHeight calculation in BVC, fall back to just using the actual
-        // collection view height
-        let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
-
-        // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
-        let spacerHeight = max(0.1, availableContentHeight - getShortcutsSectionHeight(environment: environment)
-                                                           - getStoriesSectionHeight(environment: environment)
-                                                           - getSearchBarSectionHeight(environment: environment)
-        )
+//        let collectionViewHeight = environment.container.contentSize.height
+//
+//        // If something went wrong with our availableContentHeight calculation in BVC, fall back to just using the actual
+//        // collection view height
+//        let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
+//
+//        // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
+//        let spacerHeight = max(0.1, availableContentHeight - getShortcutsSectionHeight(environment: environment)
+//                                                           - getStoriesSectionHeight(environment: environment)
+//                                                           - getSearchBarSectionHeight(environment: environment)
+//        )
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .absolute(spacerHeight))
+                                              heightDimension: .absolute(CGFloat(100)))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
         let sectionLayout = NSCollectionLayoutSection(group: group)
