@@ -146,7 +146,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "ReduxTests",
-            dependencies: ["Redux"]),
+            dependencies: ["Redux"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
         .target(
             name: "WebEngine",
             dependencies: ["Common",
