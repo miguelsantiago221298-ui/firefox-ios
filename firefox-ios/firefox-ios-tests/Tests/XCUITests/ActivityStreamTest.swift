@@ -53,6 +53,13 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         super.tearDown()
     }
 
+    func testDebugDescriptionUItoolbarBug() {
+        app.launch()
+        waitForTabsButton()
+        navigator.goto(LibraryPanel_History)
+        print(app.debugDescription)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2273342
     // Smoketest
     func testDefaultSites() throws {
