@@ -45,11 +45,7 @@ class LibraryViewController: UIViewController, Themeable {
         return librarySegmentControl
     }()
 
-    private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
-        guard let self = self else { return }
-        toolbar.delegate = self
-        toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
-    }
+    private var segmentControlContainer: UIView = .build { view in }
 
     private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
@@ -120,17 +116,18 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func viewSetup() {
         navigationItem.rightBarButtonItem = topRightButton
-        view.addSubviews(controllerContainerView, segmentControlToolbar)
+        view.addSubviews(segmentControlContainer, controllerContainerView)
+        segmentControlContainer.addSubview(librarySegmentControl)
 
         NSLayoutConstraint.activate([
-            segmentControlToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            segmentControlToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            segmentControlToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            segmentControlContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            segmentControlContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            segmentControlContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
 
-            controllerContainerView.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
+            controllerContainerView.topAnchor.constraint(equalTo: segmentControlContainer.bottomAnchor),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -244,7 +241,6 @@ class LibraryViewController: UIViewController, Themeable {
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
-        view.bringSubviewToFront(segmentControlToolbar)
         libraryPanel.endAppearanceTransition()
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
@@ -391,9 +387,8 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.backgroundColor = theme.colors.layer1
         navigationController?.toolbar.barTintColor = theme.colors.layer1
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
-        segmentControlToolbar.barTintColor = theme.colors.layer1
-        segmentControlToolbar.tintColor = theme.colors.textPrimary
-        segmentControlToolbar.isTranslucent = false
+        segmentControlContainer.backgroundColor = theme.colors.layer1
+        segmentControlContainer.tintColor = theme.colors.textPrimary
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
@@ -402,8 +397,8 @@ class LibraryViewController: UIViewController, Themeable {
     func setNavigationBarHidden(_ value: Bool) {
         navigationController?.setToolbarHidden(value, animated: true)
         navigationController?.setNavigationBarHidden(value, animated: false)
-        let controlbarHeight = segmentControlToolbar.frame.height
-        segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+        let controlbarHeight = segmentControlContainer.frame.height
+        segmentControlContainer.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
         controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
 
         // Reload the current panel
