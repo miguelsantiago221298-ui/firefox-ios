@@ -61,13 +61,14 @@ func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         makeURLBarAvailable(screenState, app: app)
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
-        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
-        let addressToolbar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        if !isTablet && homepageSearchBar.exists {
-            screenState.tap(homepageSearchBar, to: URLBarOpen)
-        } else {
-            screenState.tap(addressToolbar, to: URLBarOpen)
-        }
+//        let homepageSearchBarIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell
+//        let addressToolbar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+//        if !isTablet {
+//            let homepageSearchBar = app.cells[homepageSearchBarIdentifier]
+//            screenState.tap(homepageSearchBar, to: URLBarOpen)
+//        } else {
+//            screenState.tap(addressToolbar, to: URLBarOpen)
+//        }
 
         if isTablet {
             screenState.tap(
