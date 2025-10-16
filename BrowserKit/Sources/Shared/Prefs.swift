@@ -122,6 +122,8 @@ public struct PrefsKeys {
         public static let showFirefoxSponsoredSuggestions = "FirefoxSuggestShowSponsoredSuggestions"
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
+        public static let showTrendingSearches = "showTrendingSearchesKey"
+        public static let showRecentSearches = "showRecentSearchesKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
     }
 

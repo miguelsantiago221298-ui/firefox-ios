@@ -357,7 +357,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isTrendingSearchEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildAndUser)
     }
 
     var isRecentSearchEnabled: Bool {
