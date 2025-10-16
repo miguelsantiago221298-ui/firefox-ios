@@ -254,7 +254,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             )
         }
     }
-    
+
     var shouldShowRecentSearches = true {
         didSet {
             prefs.setBool(

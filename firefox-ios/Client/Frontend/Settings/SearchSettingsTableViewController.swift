@@ -442,6 +442,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         sectionsToDisplay = [
             .defaultEngine,
             .alternateEngines,
+            .preSearch,
             .searchEnginesSuggestions,
             .firefoxSuggestSettings
         ]
@@ -458,14 +459,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             // But the option to add a Search Engine is.
             return model.orderedEngines.count
         case .preSearch:
-            var numberOfRows = 0
-            let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-            let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
-            if isTrendingSearchEnabled {
-                numberOfRows += 1
-            } else if isRecentSearchEnabled {
-                numberOfRows += 1
-            }
+            let numberOfRows = [
+                featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly),
+                featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+            ].filter { $0 }.count
             return numberOfRows
         case .searchEnginesSuggestions:
             var numberOfRows = 1

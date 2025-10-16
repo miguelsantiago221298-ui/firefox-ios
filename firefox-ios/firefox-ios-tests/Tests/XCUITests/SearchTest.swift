@@ -626,4 +626,52 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(url)
         mozWaitForValueContains(url, value: "google")
     }
+
+    func testTrendingSearchesSettingsToggleOn_trendingSearchesUIExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        // By default, enable trending searches
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+        mozWaitForElementToExist(trendingSearchSuggestSwitch)
+
+        app.navigationBars["Search"].buttons["Settings"].tap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending Searches"])
+    }
+
+    func testTrendingSearchesSettingsToggleOff_trendingSearchesUIExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        // Disable general search suggests
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+        app.tables.switches["Show Search Suggestions"].waitAndTap()
+
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+
+        trendingSearchSuggestSwitch.waitAndTap()
+
+        app.navigationBars["Search"].buttons["Settings"].tap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending Searches"])
+    }
+
+    // MARK: Recent Searches
 }
