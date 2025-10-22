@@ -5,7 +5,9 @@
 import Foundation
 import Common
 import UIKit
+import ComponentLibrary
 
+// BottomSheetViewController
 public class SetDefaultBrowserViewController: UIViewController,
                                               Themeable {
     public var themeManager: any Common.ThemeManager
@@ -13,6 +15,7 @@ public class SetDefaultBrowserViewController: UIViewController,
     public var currentWindowUUID: Common.WindowUUID?
     private var notificationCenter: NotificationProtocol
     private let child: UIViewController
+    var onHeightUpdate: ((CGFloat) -> Void)?
 
     private lazy var closeButton: UIButton = .build {
         $0.setImage(
@@ -37,18 +40,33 @@ public class SetDefaultBrowserViewController: UIViewController,
         self.child = child
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     public static func factory(
         child: UIViewController,
         windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) -> UIViewController {
-        let controller = SetDefaultBrowserViewController(child: child,
+        let testChild = UIHostingController(rootView: TestOnboardingView())
+        testChild.view.backgroundColor = .clear
+        let controller = SetDefaultBrowserViewController(child: testChild,
                                                          windowUUID: windowUUID,
                                                          notificationCenter: notificationCenter,
                                                          themeManager: themeManager)
         let navController = UINavigationController(rootViewController: controller)
+        
+        if #available(iOS 16.0, *) {
+            controller.onHeightUpdate = { height in
+                let custom = UISheetPresentationController.Detent.custom { _ in
+                    return height
+                }
+                navController.sheetPresentationController?.detents = [custom]
+            }
+        } else {
+            navController.sheetPresentationController?.detents = [.large(), .medium()]
+        }
+        navController.sheetPresentationController?.prefersGrabberVisible = true
+        navController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
         return navController
     }
 
@@ -62,13 +80,18 @@ public class SetDefaultBrowserViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
+    
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        onHeightUpdate?(child.view.frame.height)
+    }
 
     private func setupLayout() {
         addChild(child)
-        
+
         view.addSubviews(child.view)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
-        
+
         child.view.pinToSuperview()
         child.didMove(toParent: self)
     }
@@ -78,5 +101,40 @@ public class SetDefaultBrowserViewController: UIViewController,
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         closeButton.tintColor = theme.colors.iconPrimary
+    }
+}
+
+import SwiftUI
+
+struct TestOnboardingView: View {
+    var body: some View {
+            VStack(spacing: 32.0) {
+                VStack {
+                }
+                Text("Switch your default browser")
+                    .font(FXFontStyles.Bold.title3.scaledSwiftUIFont())
+
+                Text("""
+        1. Go to **Settings**
+
+        2. Tap to **Default Browser App**
+
+        3. Select **Firefox**
+        """
+                )
+                .font(FXFontStyles.Regular.subheadline.scaledSwiftUIFont())
+
+                OnboardingPrimaryButton(
+                    title: "Go to settings",
+                    action: {
+                    },
+                    theme: LightTheme(),
+                    accessibilityIdentifier: "")
+            }
+        .padding(.horizontal, 40.0)
+        .padding(.top, 30.0)
+        .padding(.bottom, 20.0)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .scrollBounceBehavior(basedOnSize: true)
     }
 }
