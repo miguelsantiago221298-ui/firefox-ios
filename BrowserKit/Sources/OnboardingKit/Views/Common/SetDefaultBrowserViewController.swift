@@ -17,6 +17,9 @@ public class SetDefaultBrowserViewController: UIViewController,
     private let child: UIViewController
     var onHeightUpdate: ((CGFloat) -> Void)?
 
+    private var lastCalculatedHeight: CGFloat = 0
+    private var hasInitialLayoutCompleted = false
+
     private lazy var closeButton: UIButton = .build {
         $0.setImage(
             UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
@@ -56,12 +59,25 @@ public class SetDefaultBrowserViewController: UIViewController,
         let navController = UINavigationController(rootViewController: controller)
         
         if #available(iOS 16.0, *) {
-            controller.onHeightUpdate = { height in
-                let custom = UISheetPresentationController.Detent.custom { _ in
-                    return height
-                }
-                navController.sheetPresentationController?.detents = [custom]
+            final class HeightHolder {
+                var height: CGFloat = 400
             }
+            let heightHolder = HeightHolder()
+
+            controller.onHeightUpdate = { [weak navController] height in
+                heightHolder.height = height
+                if let sheet = navController?.sheetPresentationController {
+                    sheet.animateChanges {
+                        sheet.invalidateDetents()
+                    }
+                }
+            }
+
+            let customDetent = UISheetPresentationController.Detent.custom { context in
+                return heightHolder.height
+            }
+
+            navController.sheetPresentationController?.detents = [customDetent]
         } else {
             navController.sheetPresentationController?.detents = [.large(), .medium()]
         }
@@ -80,10 +96,53 @@ public class SetDefaultBrowserViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
-    
+
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        onHeightUpdate?(child.view.frame.height)
+        if !hasInitialLayoutCompleted {
+            calculateAndUpdateHeight()
+            hasInitialLayoutCompleted = true
+        }
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if lastCalculatedHeight == 0 {
+            calculateAndUpdateHeight()
+        }
+    }
+
+    private func calculateAndUpdateHeight() {
+        child.view.setNeedsLayout()
+        child.view.layoutIfNeeded()
+
+        var calculatedHeight: CGFloat = 0
+
+        if let hostingController = child as? UIHostingController<TestOnboardingView> {
+            let hostingSize = hostingController.sizeThatFits(in: CGSize(
+                width: view.bounds.width,
+                height: CGFloat.greatestFiniteMagnitude
+            ))
+            calculatedHeight = hostingSize.height
+        } else {
+            let targetSize = CGSize(
+                width: view.bounds.width,
+                height: UIView.layoutFittingCompressedSize.height
+            )
+
+            let fittingSize = child.view.systemLayoutSizeFitting(
+                targetSize,
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            calculatedHeight = fittingSize.height
+        }
+
+        let heightDifference = abs(calculatedHeight - lastCalculatedHeight)
+        if heightDifference > 5 || lastCalculatedHeight == 0 {
+            lastCalculatedHeight = calculatedHeight
+            onHeightUpdate?(calculatedHeight)
+        }
     }
 
     private func setupLayout() {
@@ -136,5 +195,10 @@ struct TestOnboardingView: View {
         .padding(.bottom, 20.0)
         .frame(maxWidth: .infinity, alignment: .leading)
         .scrollBounceBehavior(basedOnSize: true)
+        .background(Color.blue.opacity(0.1))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.red, lineWidth: 3)
+        )
     }
 }
