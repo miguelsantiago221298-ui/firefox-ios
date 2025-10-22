@@ -57,7 +57,7 @@ public class SetDefaultBrowserViewController: UIViewController,
                                                          notificationCenter: notificationCenter,
                                                          themeManager: themeManager)
         let navController = UINavigationController(rootViewController: controller)
-        
+
         if #available(iOS 16.0, *) {
             final class HeightHolder {
                 var height: CGFloat = 400
